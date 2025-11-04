@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dars 6: Animatsiya va Ovozlar - Puzzle O'yini</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button class="nav-toggle" id="navToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 6-dars</span>
+        <h1 class="lesson-title">Animatsiya va Ovozlar</h1>
+        <p class="lesson-description">
+          O'yinga jonli effektlar va ovozlar qo'shing
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 Multimedia Tajriba</h2>
+          <div class="section-content">
+            <p>
+              Animatsiya va ovozlar o'yinni yanada qiziqarli qiladi.
+              Foydalanuvchi har qanday harakatga vizual va audio javob olishi
+              kerak.
+            </p>
+            <ul>
+              <li><strong>CSS Animatsiyalar</strong> - Vizual effektlar</li>
+              <li><strong>Web Audio API</strong> - Ovoz effektlari</li>
+              <li><strong>Transition</strong> - Silliq o'tishlar</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">✨ CSS Animatsiyalar</h2>
+          <div class="section-content">
+            <p>CSS @keyframes yordamida murakkab animatsiyalar yaratamiz.</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">CSS - Animatsiyalar</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/* Yuqoridan paydo bo'lish */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Kattalashtirish */
+@keyframes popIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Sakrash */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Aylanish */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Pulsatsiya */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Ishlatish */
+.win-message {
+    animation: popIn 0.5s ease;
+}
+
+.win-emoji {
+    animation: bounce 0.6s ease infinite;
+}
+
+.puzzle-tile:hover {
+    animation: pulse 0.3s ease;
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎵 Ovoz Effektlari</h2>
+          <div class="section-content">
+            <p>HTML5 Audio API yordamida ovoz effektlarini qo'shamiz.</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Ovoz Menejeri</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Ovozlarni boshqaruvchi klass
+ */
+class SoundManager {
+    constructor() {
+        this.sounds = {};
+        this.enabled = true;
+    }
+    
+    /**
+     * Ovozni yuklash
+     */
+    load(name, url) {
+        const audio = new Audio(url);
+        audio.preload = 'auto';
+        this.sounds[name] = audio;
+    }
+    
+    /**
+     * Ovozni ijro etish
+     */
+    play(name, volume = 1.0) {
+        if (!this.enabled || !this.sounds[name]) return;
+        
+        const sound = this.sounds[name].cloneNode();
+        sound.volume = volume;
+        sound.play().catch(err => {
+            console.log('Ovoz ijro bo\'lmadi:', err);
+        });
+    }
+    
+    /**
+     * Ovozni o'chirish/yoqish
+     */
+    toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+    }
+}
+
+// Global sound manager
+const soundManager = new SoundManager();
+
+// Ovozlarni yuklash
+soundManager.load('click', 'assets/sounds/click.wav');
+soundManager.load('win', 'assets/sounds/win.wav');
+soundManager.load('shuffle', 'assets/sounds/shuffle.wav');
+
+// Ishlatish
+function handleTileClick() {
+    soundManager.play('click', 0.5);
+}
+
+function showWinMessage() {
+    soundManager.play('win', 0.8);
+    // ...
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎬 Katak Animatsiyasi</h2>
+          <div class="section-content">
+            <p>Kataklarni almashtirishda silliq animatsiya qo'shamiz.</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Silliq Almashtirish</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Kataklarni animatsiya bilan almashtirish
+ */
+function swapTilesWithAnimation(tile1, tile2) {
+    // Click ovozini ijro etish
+    soundManager.play('click', 0.3);
+    
+    // Animatsiya klassini qo'shish
+    tile1.classList.add('swapping');
+    tile2.classList.add('swapping');
+    
+    // Kichik kechikish
+    setTimeout(() => {
+        // Background pozitsiyasini almashtirish
+        const tempBg = tile1.style.backgroundPosition;
+        tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+        tile2.style.backgroundPosition = tempBg;
+        
+        // Data atributlarini almashtirish
+        const tempPos = tile1.dataset.position;
+        tile1.dataset.position = tile2.dataset.position;
+        tile2.dataset.position = tempPos;
+        
+        // Animatsiya klassini olib tashlash
+        setTimeout(() => {
+            tile1.classList.remove('swapping');
+            tile2.classList.remove('swapping');
+        }, 300);
+    }, 150);
+}
+
+// CSS
+/*
+.puzzle-tile.swapping {
+    animation: swapPulse 0.3s ease;
+}
+
+@keyframes swapPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.95); opacity: 0.7; }
+}
+*/</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🌟 Zarrachalar Effekti</h2>
+          <div class="section-content">
+            <p>G'alaba qilganda zarrachalar effektini qo'shamiz (konfetti).</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Konfetti Effekti</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Konfetti zarrachalarini yaratadi
+ */
+function createConfetti() {
+    const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+    const confettiCount = 50;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // Tasodifiy rang
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.backgroundColor = color;
+        
+        // Tasodifiy pozitsiya
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        
+        document.body.appendChild(confetti);
+        
+        // 5 soniyadan keyin olib tashlash
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// CSS
+/*
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 9999;
+    animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+*/
+
+// Ishlatish
+function showWinMessage() {
+    createConfetti();
+    soundManager.play('win');
+    // ...
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="try-it-section">
+          <h3 class="try-it-title">To'liq Multimedia Tizim</h3>
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq Kod</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>class MultimediaManager {
+    constructor() {
+        this.soundManager = new SoundManager();
+        this.initSounds();
+    }
+    
+    initSounds() {
+        this.soundManager.load('click', 'assets/sounds/click.wav');
+        this.soundManager.load('win', 'assets/sounds/win.wav');
+        this.soundManager.load('shuffle', 'assets/sounds/shuffle.wav');
+    }
+    
+    playClickSound() {
+        this.soundManager.play('click', 0.3);
+    }
+    
+    playWinSequence() {
+        // Ovoz
+        this.soundManager.play('win', 0.8);
+        
+        // Konfetti
+        this.createConfetti();
+        
+        // Xabar animatsiyasi
+        this.showWinMessage();
+    }
+    
+    createConfetti() {
+        const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b'];
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.backgroundColor = 
+                colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
+        }
+    }
+    
+    showWinMessage() {
+        const message = document.createElement('div');
+        message.className = 'win-message show';
+        message.innerHTML = `
+            <div class="win-emoji">🎉</div>
+            <h2 class="win-title">Ajoyib!</h2>
+            <p>Siz g'alaba qazondingiz!</p>
+        `;
+        
+        document.body.appendChild(message);
+    }
+    
+    animateSwap(tile1, tile2) {
+        tile1.classList.add('swapping');
+        tile2.classList.add('swapping');
+        
+        this.playClickSound();
+        
+        setTimeout(() => {
+            tile1.classList.remove('swapping');
+            tile2.classList.remove('swapping');
+        }, 300);
+    }
+}
+
+// Global
+const multimedia = new MultimediaManager();</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulosasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz:</p>
+            <ul>
+              <li>CSS @keyframes animatsiyalarini yaratdingiz</li>
+              <li>Web Audio API dan foydalandingiz</li>
+              <li>Ovoz effektlarini boshqardingiz</li>
+              <li>Konfetti effektini qo'shdingiz</li>
+              <li>Silliq o'tishlarni amalga oshirdingiz</li>
+            </ul>
+            <p><strong>Keyingi dars:</strong> Hammasini birlashtiramiz!</p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson5.html" class="btn btn-outline">← Oldingi</a>
+        <a href="lesson7.html" class="btn btn-primary">Keyingi →</a>
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.getElementById("navMenu").classList.toggle("active");
+      });
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Nusxalandi!";
+          setTimeout(() => (btn.textContent = "Nusxalash"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

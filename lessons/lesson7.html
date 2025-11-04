@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dars 7: Yakuniy Yig'ish - Puzzle O'yini</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button class="nav-toggle" id="navToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 7-dars</span>
+        <h1 class="lesson-title">Yakuniy Yig'ish</h1>
+        <p class="lesson-description">
+          Barcha qismlarni birlashtirib to'liq o'yinni yarating
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 Yakuniy Bosqich</h2>
+          <div class="section-content">
+            <p>
+              Tabriklaymiz! Siz barcha kerakli texnologiyalarni o'rgandingiz.
+              Endi biz hamma narsani birlashtirib to'liq ishlaydigan puzzle
+              o'yinini yaratamiz.
+            </p>
+            <p><strong>Nima qo'shamiz:</strong></p>
+            <ul>
+              <li>To'liq o'yin logikasi</li>
+              <li>Shuffle (aralashtrish) funksiyasi</li>
+              <li>Qayta boshlash tugmasi</li>
+              <li>Qiyinlik darajalarini tanlash</li>
+              <li>Local Storage orqali rekordlarni saqlash</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎯 To'liq O'yin Klassi</h2>
+          <div class="section-content">
+            <p>Barcha funksiyalarni bitta class ichida jamlaymiz:</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >JavaScript - To'liq PuzzleGame Klassi</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * To'liq Puzzle O'yini
+ */
+class PuzzleGame {
+    constructor(boardId, options = {}) {
+        this.board = document.getElementById(boardId);
+        this.gridSize = options.gridSize || 3;
+        this.imageUrl = options.imageUrl || 'assets/images/puzzle.jpg';
+        
+        // Holat
+        this.moveCount = 0;
+        this.isPlaying = false;
+        this.draggedElement = null;
+        
+        // Taymer
+        this.timer = new GameTimer('timerDisplay');
+        
+        // Ovoz
+        this.soundManager = new SoundManager();
+        this.initSounds();
+        
+        // Boshlash
+        this.init();
+    }
+    
+    init() {
+        this.createTiles();
+        this.attachEventListeners();
+        this.loadBestScore();
+    }
+    
+    initSounds() {
+        this.soundManager.load('click', 'assets/sounds/click.wav');
+        this.soundManager.load('win', 'assets/sounds/win.wav');
+        this.soundManager.load('shuffle', 'assets/sounds/shuffle.wav');
+    }
+    
+    createTiles() {
+        this.board.innerHTML = '';
+        this.board.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`;
+        
+        const total = this.gridSize * this.gridSize;
+        
+        for (let i = 0; i < total; i++) {
+            const tile = this.createTile(i);
+            this.board.appendChild(tile);
+        }
+    }
+    
+    createTile(index) {
+        const tile = document.createElement('div');
+        tile.className = 'puzzle-tile';
+        tile.dataset.position = index;
+        tile.dataset.correctPosition = index;
+        tile.draggable = true;
+        
+        const pos = this.calculatePosition(index);
+        tile.style.backgroundImage = `url('${this.imageUrl}')`;
+        tile.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+        tile.style.backgroundSize = `${this.gridSize * 100}%`;
+        
+        tile.setAttribute('tabindex', '0');
+        tile.setAttribute('aria-label', `Puzzle qismi ${index + 1}`);
+        
+        return tile;
+    }
+    
+    calculatePosition(index) {
+        const row = Math.floor(index / this.gridSize);
+        const col = index % this.gridSize;
+        const x = col * (100 / (this.gridSize - 1));
+        const y = row * (100 / (this.gridSize - 1));
+        return { x, y };
+    }
+    
+    attachEventListeners() {
+        this.board.addEventListener('dragstart', this.handleDragStart.bind(this));
+        this.board.addEventListener('dragend', this.handleDragEnd.bind(this));
+        this.board.addEventListener('dragover', this.handleDragOver.bind(this));
+        this.board.addEventListener('drop', this.handleDrop.bind(this));
+        
+        // Tugmalar
+        document.getElementById('shuffleBtn')?.addEventListener('click', 
+            () => this.shuffle());
+        document.getElementById('restartBtn')?.addEventListener('click', 
+            () => this.restart());
+    }
+    
+    handleDragStart(e) {
+        if (!e.target.classList.contains('puzzle-tile')) return;
+        
+        this.draggedElement = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+        
+        setTimeout(() => e.target.classList.add('dragging'), 0);
+        
+        if (!this.isPlaying) {
+            this.startGame();
+        }
+    }
+    
+    handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+        this.clearDragEffects();
+    }
+    
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+    
+    handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const dropTarget = e.target.closest('.puzzle-tile');
+        if (!dropTarget || dropTarget === this.draggedElement) {
+            return false;
+        }
+        
+        this.swapTiles(this.draggedElement, dropTarget);
+        this.incrementMoves();
+        
+        if (this.checkWin()) {
+            this.onWin();
+        }
+        
+        return false;
+    }
+    
+    swapTiles(tile1, tile2) {
+        this.soundManager.play('click', 0.3);
+        
+        // Animatsiya
+        tile1.classList.add('swapping');
+        tile2.classList.add('swapping');
+        
+        setTimeout(() => {
+            const tempBg = tile1.style.backgroundPosition;
+            tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+            tile2.style.backgroundPosition = tempBg;
+            
+            const tempPos = tile1.dataset.position;
+            tile1.dataset.position = tile2.dataset.position;
+            tile2.dataset.position = tempPos;
+            
+            setTimeout(() => {
+                tile1.classList.remove('swapping');
+                tile2.classList.remove('swapping');
+            }, 300);
+        }, 150);
+    }
+    
+    shuffle() {
+        this.soundManager.play('shuffle', 0.5);
+        
+        const tiles = Array.from(this.board.querySelectorAll('.puzzle-tile'));
+        const positions = tiles.map(t => t.style.backgroundPosition);
+        
+        // Fisher-Yates aralashtrish algoritmi
+        for (let i = positions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [positions[i], positions[j]] = [positions[j], positions[i]];
+        }
+        
+        tiles.forEach((tile, index) => {
+            tile.style.backgroundPosition = positions[index];
+            tile.dataset.position = index;
+        });
+        
+        this.restart();
+    }
+    
+    startGame() {
+        this.isPlaying = true;
+        this.timer.start();
+    }
+    
+    checkWin() {
+        const tiles = this.board.querySelectorAll('.puzzle-tile');
+        
+        for (let tile of tiles) {
+            if (tile.dataset.position !== tile.dataset.correctPosition) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    onWin() {
+        this.isPlaying = false;
+        this.timer.stop();
+        
+        this.soundManager.play('win', 0.8);
+        this.createConfetti();
+        
+        const time = this.timer.getTime();
+        this.saveBestScore(time, this.moveCount);
+        
+        this.showWinMessage(time, this.moveCount);
+    }
+    
+    showWinMessage(time, moves) {
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay show';
+        
+        const message = document.createElement('div');
+        message.className = 'win-message show';
+        message.innerHTML = `
+            <div class="win-emoji">🎉</div>
+            <h2 class="win-title">Tabriklaymiz!</h2>
+            <p class="win-text">
+                ⏱️ Vaqt: ${this.formatTime(time)}<br>
+                🔢 Harakatlar: ${moves}
+            </p>
+            <button class="btn btn-primary" id="playAgainBtn">
+                Yana O'ynash
+            </button>
+        `;
+        
+        document.body.appendChild(overlay);
+        document.body.appendChild(message);
+        
+        document.getElementById('playAgainBtn').addEventListener('click', () => {
+            overlay.remove();
+            message.remove();
+            this.restart();
+            this.shuffle();
+        });
+    }
+    
+    createConfetti() {
+        const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b'];
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.backgroundColor = 
+                colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
+        }
+    }
+    
+    incrementMoves() {
+        this.moveCount++;
+        this.updateDisplay();
+    }
+    
+    restart() {
+        this.moveCount = 0;
+        this.timer.reset();
+        this.isPlaying = false;
+        this.updateDisplay();
+    }
+    
+    updateDisplay() {
+        const moveDisplay = document.getElementById('moveCount');
+        if (moveDisplay) {
+            moveDisplay.textContent = `Harakatlar: ${this.moveCount}`;
+        }
+    }
+    
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    saveBestScore(time, moves) {
+        const current = { time, moves, date: new Date().toISOString() };
+        const best = JSON.parse(localStorage.getItem('puzzleBestScore'));
+        
+        if (!best || time < best.time) {
+            localStorage.setItem('puzzleBestScore', JSON.stringify(current));
+        }
+    }
+    
+    loadBestScore() {
+        const best = JSON.parse(localStorage.getItem('puzzleBestScore'));
+        if (best) {
+            console.log('Eng yaxshi natija:', this.formatTime(best.time));
+        }
+    }
+    
+    clearDragEffects() {
+        const tiles = this.board.querySelectorAll('.puzzle-tile');
+        tiles.forEach(tile => tile.classList.remove('drag-over'));
+    }
+}
+
+// Global o'zgaruvchi
+let game;
+
+// DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    game = new PuzzleGame('puzzleBoard', {
+        gridSize: 3,
+        imageUrl: 'assets/images/puzzle.jpg'
+    });
+    
+    // Darhol aralashtrish
+    setTimeout(() => game.shuffle(), 500);
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">💾 Local Storage</h2>
+          <div class="section-content">
+            <p>Rekordlarni saqlash va yuklash:</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Rekordlar Tizimi</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>class ScoreManager {
+    constructor(storageKey = 'puzzleScores') {
+        this.storageKey = storageKey;
+    }
+    
+    save(score) {
+        const scores = this.getAll();
+        scores.push({
+            ...score,
+            id: Date.now(),
+            date: new Date().toISOString()
+        });
+        
+        // Eng yaxshi 10tasini saqlash
+        scores.sort((a, b) => a.time - b.time);
+        const topScores = scores.slice(0, 10);
+        
+        localStorage.setItem(this.storageKey, JSON.stringify(topScores));
+    }
+    
+    getAll() {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : [];
+    }
+    
+    getBest() {
+        const scores = this.getAll();
+        return scores[0] || null;
+    }
+    
+    clear() {
+        localStorage.removeItem(this.storageKey);
+    }
+    
+    displayLeaderboard() {
+        const scores = this.getAll();
+        const html = scores.map((score, index) => `
+            <div class="score-item">
+                <span>${index + 1}</span>
+                <span>${this.formatTime(score.time)}</span>
+                <span>${score.moves} harakatlar</span>
+            </div>
+        `).join('');
+        
+        return html;
+    }
+    
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulosasi</h2>
+          <div class="section-content">
+            <p>Tabriklaymiz! Siz to'liq puzzle o'yinini yaratdingiz!</p>
+            <p><strong>O'rganilgan texnologiyalar:</strong></p>
+            <ul>
+              <li>✅ HTML semantik strukturasi</li>
+              <li>✅ SCSS bilan professional styling</li>
+              <li>✅ JavaScript OOP va klasslar</li>
+              <li>✅ Drag & Drop API</li>
+              <li>✅ CSS animatsiyalar</li>
+              <li>✅ Web Audio API</li>
+              <li>✅ Local Storage</li>
+              <li>✅ Event handling</li>
+              <li>✅ Responsive design</li>
+            </ul>
+            <p class="mt-3">
+              <strong>Keyingi qadamlar:</strong><br />
+              • Demo sahifada to'liq o'yinni sinab ko'ring<br />
+              • O'z rasmlaringiz bilan test qiling<br />
+              • Kodni o'zingizga moslashtiring<br />
+              • Qo'shimcha funksiyalar qo'shing
+            </p>
+          </div>
+        </section>
+
+        <section
+          class="section"
+          style="
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+          "
+        >
+          <h2 style="color: white">🎮 To'liq O'yinni Sinab Ko'ring!</h2>
+          <p style="font-size: 1.125rem; margin: 1.5rem 0">
+            Barcha darslarni tugatdingiz. Endi demo sahifada to'liq ishlaydigan
+            o'yinni o'ynang!
+          </p>
+          <a
+            href="../demo.html"
+            class="btn btn-primary"
+            style="background: white; color: #6366f1; display: inline-block"
+          >
+            Demo O'yinga O'tish →
+          </a>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson6.html" class="btn btn-outline">← Oldingi Dars</a>
+        <a href="../demo.html" class="btn btn-primary">Demo O'yin →</a>
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi. Ta'lim resursi.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.getElementById("navMenu").classList.toggle("active");
+      });
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Nusxalandi!";
+          setTimeout(() => (btn.textContent = "Nusxalash"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

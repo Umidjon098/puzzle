@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dars 4: Drag & Drop - Puzzle O'yini</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button class="nav-toggle" id="navToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 4-dars</span>
+        <h1 class="lesson-title">Drag & Drop Logikasi</h1>
+        <p class="lesson-description">
+          HTML5 Drag and Drop API yordamida interaktiv o'yin yarating
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 Drag & Drop Nima?</h2>
+          <div class="section-content">
+            <p>
+              Drag and Drop (sudrab-qo'yish) foydalanuvchilarga elementlarni
+              sichqoncha bilan tortib, boshqa joyga qo'yish imkonini beradi.
+              HTML5 bu uchun maxsus API taqdim etadi.
+            </p>
+            <p><strong>Asosiy hodisalar:</strong></p>
+            <ul>
+              <li><code>dragstart</code> - Sudralish boshlanganida</li>
+              <li><code>drag</code> - Sudralganda</li>
+              <li><code>dragend</code> - Sudralish tugaganida</li>
+              <li><code>dragenter</code> - Element ustiga kirilganda</li>
+              <li><code>dragover</code> - Element ustida</li>
+              <li><code>drop</code> - Element qo'yilganda</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎯 Dragstart Hodisasi</h2>
+          <div class="section-content">
+            <p>
+              Foydalanuvchi katakni sudray boshlaganda, biz qaysi katak
+              sudralyapganini eslab qolishimiz kerak.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Dragstart</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>// Sudralayotgan element
+let draggedElement = null;
+
+/**
+ * Katak sudralay boshlanganda
+ */
+function handleDragStart(e) {
+    // Sudralayotgan elementni saqlash
+    draggedElement = e.target;
+    
+    // Ko'rinish effekti
+    e.target.classList.add('dragging');
+    
+    // Transfer qilinadigan ma'lumotni o'rnatish
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target.innerHTML);
+}
+
+// Barcha kataklar uchun listener qo'shish
+const tiles = document.querySelectorAll('.puzzle-tile');
+tiles.forEach(tile => {
+    tile.addEventListener('dragstart', handleDragStart);
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🔄 Dragover va Drop</h2>
+          <div class="section-content">
+            <p>
+              Element ustiga qo'yilishiga ruxsat berish uchun
+              <code>dragover</code> hodisasida default harakatni bekor
+              qilishimiz kerak.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Dragover va Drop</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Element ustida sudralayotganda
+ */
+function handleDragOver(e) {
+    e.preventDefault(); // Default harakatni bekor qilish (majburiy!)
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+}
+
+/**
+ * Element qo'yilganda
+ */
+function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Hodisani yuqoriga o'tkazmaslik
+    
+    // Agar o'ziga-o'zi qo'yilsa, hech narsa qilmaslik
+    if (draggedElement === e.target) {
+        return false;
+    }
+    
+    // Kataklarni almashtirish
+    swapTiles(draggedElement, e.target);
+    
+    return false;
+}
+
+/**
+ * Ikki katakni almashtirish
+ */
+function swapTiles(tile1, tile2) {
+    // Pozitsiyalarni olish
+    const pos1 = tile1.dataset.position;
+    const pos2 = tile2.dataset.position;
+    
+    // Background stillarini saqlash
+    const bg1 = tile1.style.backgroundPosition;
+    const bg2 = tile2.style.backgroundPosition;
+    
+    // Almashtrish
+    tile1.style.backgroundPosition = bg2;
+    tile2.style.backgroundPosition = bg1;
+    
+    // Pozitsiyalarni yangilash
+    tile1.dataset.position = pos2;
+    tile2.dataset.position = pos1;
+}
+
+// Listenerlarni qo'shish
+tiles.forEach(tile => {
+    tile.addEventListener('dragover', handleDragOver);
+    tile.addEventListener('drop', handleDrop);
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">✨ Vizual Effektlar</h2>
+          <div class="section-content">
+            <p>
+              Foydalanuvchi tajribasini yaxshilash uchun sudralayotgan katakka
+              vizual effekt qo'shamiz.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Vizual Effektlar</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>function handleDragStart(e) {
+    draggedElement = e.target;
+    
+    // Sudralayotgan katak shaffof ko'rinadi
+    setTimeout(() => {
+        e.target.classList.add('dragging');
+    }, 0);
+}
+
+function handleDragEnd(e) {
+    // Effektni olib tashlash
+    e.target.classList.remove('dragging');
+    
+    // Barcha drop-zone belgilarini olib tashlash
+    tiles.forEach(tile => {
+        tile.classList.remove('drag-over');
+    });
+}
+
+function handleDragEnter(e) {
+    // Element ustiga kirilganda
+    if (e.target.classList.contains('puzzle-tile')) {
+        e.target.classList.add('drag-over');
+    }
+}
+
+function handleDragLeave(e) {
+    // Element ustidan chiqilganda
+    e.target.classList.remove('drag-over');
+}
+
+// CSS stillari
+// .puzzle-tile.dragging { opacity: 0.5; }
+// .puzzle-tile.drag-over { border: 2px solid #6366f1; }</code></pre>
+          </div>
+        </section>
+
+        <section class="try-it-section">
+          <h3 class="try-it-title">To'liq Drag & Drop Tizimi</h3>
+          <p>Mana to'liq ishlaydig an drag & drop kodi:</p>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq Kod</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>class PuzzleDragDrop {
+    constructor(boardId) {
+        this.board = document.getElementById(boardId);
+        this.draggedElement = null;
+        this.init();
+    }
+    
+    init() {
+        this.board.addEventListener('dragstart', this.handleDragStart.bind(this));
+        this.board.addEventListener('dragend', this.handleDragEnd.bind(this));
+        this.board.addEventListener('dragover', this.handleDragOver.bind(this));
+        this.board.addEventListener('drop', this.handleDrop.bind(this));
+        this.board.addEventListener('dragenter', this.handleDragEnter.bind(this));
+        this.board.addEventListener('dragleave', this.handleDragLeave.bind(this));
+    }
+    
+    handleDragStart(e) {
+        if (!e.target.classList.contains('puzzle-tile')) return;
+        
+        this.draggedElement = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+        
+        setTimeout(() => {
+            e.target.classList.add('dragging');
+        }, 0);
+    }
+    
+    handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+        this.clearDragOverEffects();
+    }
+    
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+    
+    handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const dropTarget = e.target.closest('.puzzle-tile');
+        if (!dropTarget || dropTarget === this.draggedElement) {
+            return false;
+        }
+        
+        this.swapTiles(this.draggedElement, dropTarget);
+        this.clearDragOverEffects();
+        
+        return false;
+    }
+    
+    handleDragEnter(e) {
+        const tile = e.target.closest('.puzzle-tile');
+        if (tile && tile !== this.draggedElement) {
+            tile.classList.add('drag-over');
+        }
+    }
+    
+    handleDragLeave(e) {
+        const tile = e.target.closest('.puzzle-tile');
+        if (tile) {
+            tile.classList.remove('drag-over');
+        }
+    }
+    
+    swapTiles(tile1, tile2) {
+        const tempBg = tile1.style.backgroundPosition;
+        tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+        tile2.style.backgroundPosition = tempBg;
+        
+        const tempPos = tile1.dataset.position;
+        tile1.dataset.position = tile2.dataset.position;
+        tile2.dataset.position = tempPos;
+    }
+    
+    clearDragOverEffects() {
+        const tiles = this.board.querySelectorAll('.puzzle-tile');
+        tiles.forEach(tile => tile.classList.remove('drag-over'));
+    }
+}
+
+// Ishlatish
+const dragDrop = new PuzzleDragDrop('puzzleBoard');</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulosasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz:</p>
+            <ul>
+              <li>HTML5 Drag and Drop API ni o'rgandingiz</li>
+              <li>Barcha kerakli hodisalarni qo'llash usulini bildingiz</li>
+              <li>Kataklarni almashtirish logikasini yozdingiz</li>
+              <li>Vizual effektlar qo'shdingiz</li>
+              <li>Event delegation dan foydalandingiz</li>
+            </ul>
+            <p><strong>Keyingi dars:</strong> G'alaba holatini aniqlash!</p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson3.html" class="btn btn-outline">← Oldingi</a>
+        <a href="lesson5.html" class="btn btn-primary">Keyingi →</a>
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.getElementById("navMenu").classList.toggle("active");
+      });
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Nusxalandi!";
+          setTimeout(() => (btn.textContent = "Nusxalash"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

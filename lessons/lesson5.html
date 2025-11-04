@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dars 5: G'alabani Aniqlash - Puzzle O'yini</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button class="nav-toggle" id="navToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 5-dars</span>
+        <h1 class="lesson-title">G'alabani Aniqlash</h1>
+        <p class="lesson-description">
+          Puzzle yechilganligini qanday aniqlashni o'rganing
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 G'alaba Sharti</h2>
+          <div class="section-content">
+            <p>
+              Puzzle yechilgan deb hisoblanadi, agar barcha kataklarning hozirgi
+              pozitsiyasi to'g'ri pozitsiyasiga mos kelsa. Biz har bir katak
+              uchun tekshirish o'tkazamiz.
+            </p>
+            <ul>
+              <li>
+                Har bir katakn ing <code>data-position</code> ni tekshirish
+              </li>
+              <li>Uni <code>data-correct-position</code> bilan solishtiris</li>
+              <li>Agar hammasi to'g'ri bo'lsa - g'alaba!</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎯 Tekshirish Funksiyasi</h2>
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - G'alabani Tekshirish</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Puzzle yechilganligini tekshiradi
+ * @returns {boolean} - true agar yechilgan bo'lsa
+ */
+function checkWin() {
+    const tiles = document.querySelectorAll('.puzzle-tile');
+    
+    // Har bir katak uchun
+    for (let tile of tiles) {
+        const currentPos = tile.dataset.position;
+        const correctPos = tile.dataset.correctPosition;
+        
+        // Agar bitta ham noto'g'ri bo'lsa
+        if (currentPos !== correctPos) {
+            return false; // Yechilmagan
+        }
+    }
+    
+    // Barcha katak joy-joyida
+    return true;
+}
+
+// Har safar almashtirishdan keyin tekshirish
+function handleDrop(e) {
+    // ... drop logikasi ...
+    
+    swapTiles(draggedElement, e.target);
+    
+    // G'alabani tekshirish
+    if (checkWin()) {
+        showWinMessage();
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎉 G'alaba Xabari</h2>
+          <div class="section-content">
+            <p>Foydalanuvchi g'alaba qilganda chiroyli xabar ko'rsatamiz.</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - G'alaba Xabari</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * G'alaba xabarini ko'rsatadi
+ */
+function showWinMessage() {
+    // Overlay yaratish
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay show';
+    
+    // Xabar konteyner
+    const message = document.createElement('div');
+    message.className = 'win-message show';
+    message.innerHTML = `
+        <div class="win-emoji">🎉</div>
+        <h2 class="win-title">Tabriklaymiz!</h2>
+        <p class="win-text">Siz puzzleni muvaffaqiyatli yechdingiz!</p>
+        <button class="btn btn-primary" onclick="closeWinMessage()">
+            Yana o'ynash
+        </button>
+    `;
+    
+    // DOMga qo'shish
+    document.body.appendChild(overlay);
+    document.body.appendChild(message);
+    
+    // Ovoz chiqarish (keyingi darsda)
+    playWinSound();
+}
+
+/**
+ * G'alaba xabarini yopish
+ */
+function closeWinMessage() {
+    const overlay = document.querySelector('.overlay');
+    const message = document.querySelector('.win-message');
+    
+    overlay.remove();
+    message.remove();
+    
+    // Puzzleni qayta aralashtrish
+    shufflePuzzle();
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🔢 Harakat Hisoblagich</h2>
+          <div class="section-content">
+            <p>Foydalanuvchi necha marta katak almashtirganini hisoblash:</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Harakatlar Hisobi</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>// Global o'zgaruvchi
+let moveCount = 0;
+
+/**
+ * Harakatni hisobga olish
+ */
+function incrementMoveCount() {
+    moveCount++;
+    updateMoveDisplay();
+}
+
+/**
+ * Ekranda ko'rsatish
+ */
+function updateMoveDisplay() {
+    const display = document.getElementById('moveCount');
+    display.textContent = `Harakatlar: ${moveCount}`;
+}
+
+/**
+ * Qayta boshlash
+ */
+function resetMoveCount() {
+    moveCount = 0;
+    updateMoveDisplay();
+}
+
+// Drop handleriga qo'shish
+function handleDrop(e) {
+    // ... drop logikasi ...
+    
+    swapTiles(draggedElement, e.target);
+    incrementMoveCount(); // Harakatni hisoblash
+    
+    if (checkWin()) {
+        showWinMessage();
+    }
+}
+
+// HTML
+// <div id="moveCount">Harakatlar: 0</div></code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">⏱️ Vaqt O'lchagich</h2>
+          <div class="section-content">
+            <p>O'yin vaqtini hisoblash uchun taymer qo'shamiz:</p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Taymer</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>class GameTimer {
+    constructor(displayId) {
+        this.display = document.getElementById(displayId);
+        this.seconds = 0;
+        this.intervalId = null;
+        this.isRunning = false;
+    }
+    
+    start() {
+        if (this.isRunning) return;
+        
+        this.isRunning = true;
+        this.intervalId = setInterval(() => {
+            this.seconds++;
+            this.updateDisplay();
+        }, 1000);
+    }
+    
+    stop() {
+        this.isRunning = false;
+        clearInterval(this.intervalId);
+    }
+    
+    reset() {
+        this.stop();
+        this.seconds = 0;
+        this.updateDisplay();
+    }
+    
+    updateDisplay() {
+        const minutes = Math.floor(this.seconds / 60);
+        const secs = this.seconds % 60;
+        const formatted = `${minutes}:${secs.toString().padStart(2, '0')}`;
+        this.display.textContent = `Vaqt: ${formatted}`;
+    }
+    
+    getTime() {
+        return this.seconds;
+    }
+}
+
+// Ishlatish
+const timer = new GameTimer('timerDisplay');
+
+// O'yin boshlanganida
+function startGame() {
+    timer.start();
+}
+
+// G'alaba qilganda
+function showWinMessage() {
+    timer.stop();
+    const time = timer.getTime();
+    // ... xabarda vaqtni ko'rsatish ...
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="try-it-section">
+          <h3 class="try-it-title">To'liq G'alaba Tizimi</h3>
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq Kod</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>class PuzzleGame {
+    constructor(boardId) {
+        this.board = document.getElementById(boardId);
+        this.moveCount = 0;
+        this.timer = new GameTimer('timerDisplay');
+    }
+    
+    checkWin() {
+        const tiles = this.board.querySelectorAll('.puzzle-tile');
+        
+        for (let tile of tiles) {
+            if (tile.dataset.position !== tile.dataset.correctPosition) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    handleTileSwap() {
+        this.moveCount++;
+        this.updateMoveDisplay();
+        
+        if (this.checkWin()) {
+            this.onWin();
+        }
+    }
+    
+    onWin() {
+        this.timer.stop();
+        
+        const message = document.createElement('div');
+        message.className = 'win-message show';
+        message.innerHTML = `
+            <div class="win-emoji">🎉</div>
+            <h2 class="win-title">Tabriklaymiz!</h2>
+            <p class="win-text">
+                Vaqt: ${this.formatTime(this.timer.getTime())}<br>
+                Harakatlar: ${this.moveCount}
+            </p>
+            <button class="btn btn-primary" onclick="game.restart()">
+                Yana o'ynash
+            </button>
+        `;
+        
+        document.body.appendChild(message);
+    }
+    
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    restart() {
+        this.moveCount = 0;
+        this.updateMoveDisplay();
+        this.timer.reset();
+        this.timer.start();
+        
+        document.querySelector('.win-message')?.remove();
+        
+        this.shufflePuzzle();
+    }
+    
+    updateMoveDisplay() {
+        document.getElementById('moveCount').textContent = 
+            `Harakatlar: ${this.moveCount}`;
+    }
+}
+
+// Global o'zgaruvchi
+const game = new PuzzleGame('puzzleBoard');</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulosasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz:</p>
+            <ul>
+              <li>G'alaba shartini qanday tekshirishni o'rgandingiz</li>
+              <li>Chiroyli g'alaba xabari yaratdingiz</li>
+              <li>Harakatlar hisoblagichini qo'shdingiz</li>
+              <li>Vaqt o'lchagichni amalga oshirdingiz</li>
+              <li>O'yin statistikasini ko'rsatdingiz</li>
+            </ul>
+            <p><strong>Keyingi dars:</strong> Animatsiya va ovozlar!</p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson4.html" class="btn btn-outline">← Oldingi</a>
+        <a href="lesson6.html" class="btn btn-primary">Keyingi →</a>
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.getElementById("navMenu").classList.toggle("active");
+      });
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Nusxalandi!";
+          setTimeout(() => (btn.textContent = "Nusxalash"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

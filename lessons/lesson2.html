@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Dars 2: Puzzle o'yininiz uchun SCSS stillashtirish usullarini o'rganing"
+    />
+    <title>Dars 2: SCSS Stillari - Puzzle O'yini Darsligi</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Navigatsiyani ochish"
+        >
+          ☰
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 2-dars</span>
+        <h1 class="lesson-title">SCSS Bilan Stillashtirish</h1>
+        <p class="lesson-description">
+          SCSS o'zgaruvchilar, mixinlar va nesting yordamida chiroyli va
+          saqlanishi oson stillarni yarating
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 SCSS Nima?</h2>
+          <div class="section-content">
+            <p>
+              SCSS (Sassy CSS) - bu CSS'ni o'zgaruvchilar, nesting va mixinlar
+              kabi kuchli funksiyalar bilan kengaytiradigan preprocessordir. U
+              stillarni tashkil qilingan, qayta foydalanish mumkin va saqlashga
+              oson qiladi.
+            </p>
+            <p><strong>Nega SCSS ishlatish kerak?</strong></p>
+            <ul>
+              <li>
+                <strong>O'zgaruvchilar</strong> - Ranglar, o'lchamlar va
+                qiymatlarni qayta ishlatish uchun saqlash
+              </li>
+              <li><strong>Nesting</strong> - Tozaroq, tartibli CSS yozish</li>
+              <li>
+                <strong>Mixinlar</strong> - Qayta foydalaniladigan stil
+                patternlarini yaratish
+              </li>
+              <li>
+                <strong>Funksiyalar</strong> - Hisob-kitoblar va
+                transformatsiyalar bajarish
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎨 O'zgaruvchilarni Sozlash</h2>
+          <div class="section-content">
+            <p>
+              O'zgaruvchilar sizning stillar jadvalingizda ishlatiladigan
+              qiymatlarni saqlash imkonini beradi. Bu doimiy ranglar va
+              intervallarni saqlash hamda global o'zgarishlarni tez amalga
+              oshirishni osonlashtiradi.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >SCSS - Puzzle O'yini Uchun O'zgaruvchilar</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>// Color palette for the puzzle game
+$primary-color: #6366f1;      // Indigo - main brand color
+$secondary-color: #8b5cf6;    // Purple - accent color
+$success-color: #10b981;      // Green - for win state
+$text-color: #1f2937;         // Dark gray for text
+$bg-color: #f9fafb;           // Light background
+
+// Spacing scale
+$spacing-sm: 0.5rem;   // 8px
+$spacing-md: 1rem;     // 16px
+$spacing-lg: 1.5rem;   // 24px
+$spacing-xl: 2rem;     // 32px
+
+// Border radius
+$radius: 0.5rem;       // 8px
+$radius-lg: 1rem;      // 16px
+
+// Shadows
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+// Transitions
+$transition: 300ms ease;</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Nomlash Qoidalari</div>
+            <div class="tip-content">
+              Faqat qiymatni emas, balki maqsadni tushuntiruvchi tavsiflovchi
+              o'zgaruvchi nomlaridan foydalaning. Masalan,
+              <code>$primary-color</code> <code>$blue</code>dan yaxshiroqdir,
+              chunki siz keyinchalik bir xil maqsadni saqlab qolgan holda rangni
+              o'zgartirishingiz mumkin.
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🔲 Puzzle Taxtasini Stillashtirish</h2>
+          <div class="section-content">
+            <p>
+              Puzzle taxtasi plitalarni mukammal kvadrat tarmoqda joylashtirish
+              uchun CSS Grid'dan foydalanadi. SCSS nesting barcha tegishli
+              stillarni bir joyda tartibga solishga yordam beradi.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">SCSS - Puzzle Taxtasi Stillari</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>.puzzle-board {
+  // Use CSS Grid for perfect tile layout
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 equal columns
+  gap: $spacing-sm;                      // Space between tiles
+  
+  // Size and spacing
+  max-width: 450px;
+  aspect-ratio: 1;        // Make it a perfect square
+  margin: 0 auto;         // Center horizontally
+  padding: $spacing-sm;
+  
+  // Visual styling
+  background: $bg-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  
+  // Responsive design - smaller on mobile
+  @media (max-width: 768px) {
+    max-width: 100%;
+    gap: 0.25rem;
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🧩 Puzzle Plitalarini Stillashtirish</h2>
+          <div class="section-content">
+            <p>
+              Har bir plita fon rasmining bir qismini ko'rsatishi va
+              foydalanuvchi o'zaro ta'siriga silliq o'tishlar va hover
+              effektlari bilan javob berishi kerak.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">SCSS - Puzzle Plita Stillari</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>.puzzle-tile {
+  // Make sure the background image covers the entire tile
+  background-size: 300%;      // For 3x3 grid (100% per tile)
+  background-repeat: no-repeat;
+  background-color: #f3f4f6;  // Fallback color
+  
+  // Visual effects
+  border-radius: $radius;
+  cursor: grab;               // Show it's draggable
+  transition: transform $transition, box-shadow $transition;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  
+  // Hover effect - tile lifts up slightly
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: $shadow;
+  }
+  
+  // Active/dragging state
+  &:active {
+    cursor: grabbing;
+  }
+  
+  // When being dragged
+  &.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+// For a 4x4 puzzle, use 400% background size
+.puzzle-board.grid-4x4 .puzzle-tile {
+  background-size: 400%;
+}</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Background-Size Tushunish</div>
+            <div class="tip-content">
+              <p>
+                3×3 tarmoq uchun biz <code>background-size: 300%</code>
+                ishlatamiz, chunki:
+              </p>
+              <ul>
+                <li>
+                  Har bir plita rasmning kengligi va balandligining 1/3 qismini
+                  ko'rsatadi
+                </li>
+                <li>300% degani fon plitadan 3× kattaroqdir</li>
+                <li>
+                  Keyin uni <code>background-position</code> yordamida joylaymiz
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">
+            ✨ Qayta Foydalaniladigan Mixinlar Yaratish
+          </h2>
+          <div class="section-content">
+            <p>
+              Mixinlar - bu istalgan joyda qo'shishingiz mumkin bo'lgan qayta
+              foydalaniladigan stil bloklaridir. Ular kontentni markazlashtirish
+              yoki tugmalar yaratish kabi umumiy patternlar uchun juda mos
+              keladi.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">SCSS - Foydali Mixinlar</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>// Mixin for centering content with flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Mixin for consistent button styles
+@mixin button($bg-color) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: $bg-color;
+  color: white;
+  border: none;
+  border-radius: $radius;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Using the mixins
+.puzzle-controls {
+  @include flex-center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  
+  button {
+    @include button($primary-color);
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎉 G'alaba Xabarini Stillashtirish</h2>
+          <div class="section-content">
+            <p>
+              O'yinchi puzzleni yechganda, biz silliq animatsiyalar bilan tabrik
+              xabarini ko'rsatamiz.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >SCSS - Animatsiya Bilan G'alaba Xabari</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>// Win message overlay
+.win-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);  // Start hidden
+  background: white;
+  padding: 3rem;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  text-align: center;
+  z-index: 2000;
+  
+  // Show with pop-in animation
+  &.show {
+    animation: popIn 0.5s ease forwards;
+  }
+  
+  // Animated emoji
+  .win-emoji {
+    font-size: 4rem;
+    margin-bottom: $spacing-md;
+    animation: bounce 0.6s ease infinite;
+  }
+  
+  .win-title {
+    color: $success-color;
+    font-size: 2rem;
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Pop-in animation
+@keyframes popIn {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+// Bounce animation
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="try-it-section">
+          <h3 class="try-it-title">To'liq Puzzle O'yini Stillari</h3>
+          <p>
+            Mana puzzle o'yininiz uchun barcha stillarni o'z ichiga olgan to'liq
+            SCSS fayli. Buni <code>puzzle.scss</code> sifatida saqlang va CSS'ga
+            kompilyatsiya qiling.
+          </p>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq SCSS Fayli</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>// Variables
+$primary-color: #6366f1;
+$success-color: #10b981;
+$spacing: 1rem;
+$radius: 0.5rem;
+$transition: 300ms ease;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Puzzle game container
+.puzzle-game {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+// Controls
+.puzzle-controls {
+  @include flex-center;
+  gap: $spacing;
+  margin-bottom: 2rem;
+}
+
+// Board
+.puzzle-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  max-width: 450px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+// Tiles
+.puzzle-tile {
+  background-size: 300%;
+  border-radius: $radius;
+  cursor: grab;
+  transition: transform $transition;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulasasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz quyidagilarni o'rgandingiz:</p>
+            <ul>
+              <li>
+                Doimiy stillashtirish uchun SCSS o'zgaruvchilaridan foydalanish
+              </li>
+              <li>
+                Qayta foydalaniladigan kod uchun mixinlar yaratish va ishlatish
+              </li>
+              <li>
+                CSS Grid bilan tarmoq asosidagi puzzle taxtasini stillashtirish
+              </li>
+              <li>
+                Interaktivlik uchun hover effektlari va o'tishlarni qo'shish
+              </li>
+              <li>Vizual fikr-mulohaza uchun animatsiyalar yaratish</li>
+            </ul>
+            <p>
+              <strong>Keyingi:</strong> 3-darsda biz JavaScript yordamida rasmni
+              puzzle qismlariga bo'lishni o'rganamiz!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson1.html" class="btn btn-outline"
+          >← Oldingi: HTML Strukturasi</a
+        >
+        <a href="lesson3.html" class="btn btn-primary"
+          >Keyingi: Rasmni Bo'lish →</a
+        >
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi. Ta'lim resursi.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+      navToggle.addEventListener("click", () =>
+        navMenu.classList.toggle("active")
+      );
+
+      function copyCode(button) {
+        const code = button
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = "Nusxa olindi!";
+          setTimeout(() => (button.textContent = "Nusxa olish"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

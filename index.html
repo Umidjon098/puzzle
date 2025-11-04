@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="HTML, SCSS va JavaScript yordamida interaktiv puzzle o'yinini yaratishni o'rganing. Boshlovchilar uchun to'liq qadamma-qadam darslik."
+    />
+    <title>
+      Puzzle O'yini Darsligi - O'yinlar Orqali Veb-Dasturlashni O'rganing
+    </title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo"> 🧩 Puzzle Darsligi </a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Navigatsiyani ochish"
+        >
+          ☰
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link active">Bosh sahifa</a></li>
+          <li><a href="lessons/lesson1.html" class="nav-link">Darslar</a></li>
+          <li><a href="demo.html" class="nav-link">Demo</a></li>
+          <li><a href="#about" class="nav-link">Haqida</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <h1 class="hero-title">
+          Puzzle O'yinini Yaratish Orqali Veb-Dasturlashni O'rganing 🎮
+        </h1>
+        <p class="hero-subtitle">
+          Amaliy, interaktiv darslik orqali HTML, SCSS va JavaScript'ni
+          o'zlashtiring. Noldan to'liq ishlaydigan puzzle o'yinini yarating!
+        </p>
+        <div class="hero-cta">
+          <a
+            href="lessons/lesson1.html"
+            class="btn btn-primary btn-large"
+            style="background: white; color: #6366f1"
+            >O'rganishni Boshlash</a
+          >
+          <a
+            href="demo.html"
+            class="btn btn-outline btn-large"
+            style="margin-left: 1rem; color: white; border-color: white"
+            >Demoni Sinash</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- What You'll Learn Section -->
+      <section class="text-center mb-4">
+        <h2>Nimalarni O'rganasiz</h2>
+        <p class="text-secondary">
+          Bu keng qamrovli darslik interaktiv puzzle o'yinini yaratish uchun
+          zarur bo'lgan hamma narsani o'z ichiga oladi
+        </p>
+      </section>
+
+      <!-- Features Grid -->
+      <div class="cards-grid">
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            🎨
+          </div>
+          <h3 class="card-title">SCSS bilan Zamonaviy Dizayn</h3>
+          <p class="card-text">
+            SCSS o'zgaruvchilar, mixinlar va nesting yordamida toza, sodda CSS
+            yozishni o'rganing. Barcha qurilmalarda ishlaydigan chiroyli,
+            responsive dizayn yarating.
+          </p>
+        </article>
+
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            🖱️
+          </div>
+          <h3 class="card-title">Interaktiv Drag & Drop</h3>
+          <p class="card-text">
+            HTML5 Drag and Drop API'ni o'zlashtiring. O'yinni qiziqarli va
+            o'ynashga qulay qiladigan silliq, intuitiv interaktsiyalarni amalga
+            oshiring.
+          </p>
+        </article>
+
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            ⚡
+          </div>
+          <h3 class="card-title">JavaScript O'yin Logikasi</h3>
+          <p class="card-text">
+            Asosiy o'yin mexanizmlarini yarating: kataklarni aralashtirish,
+            g'alabani aniqlash, holatni boshqarish. Dasturlash konseptlarini
+            amaliy qo'llash orqali o'rganing.
+          </p>
+        </article>
+
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            🎵
+          </div>
+          <h3 class="card-title">Multimedia Integratsiyasi</h3>
+          <p class="card-text">
+            Chuqur tajriba yaratish uchun ovoz effektlari va animatsiyalar
+            qo'shing. Audio fayllar va CSS animatsiyalar bilan ishlashni
+            o'rganing.
+          </p>
+        </article>
+
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            📱
+          </div>
+          <h3 class="card-title">Responsive Dizayn</h3>
+          <p class="card-text">
+            Desktop, planshet va mobil qurilmalarda mukammal ishlaydigan o'yin
+            yarating. Responsive dizayn texnikalar va mobile-first yondashuvni
+            o'zlashtiring.
+          </p>
+        </article>
+
+        <article class="card">
+          <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem">
+            ♿
+          </div>
+          <h3 class="card-title">Accessibility Eng Yaxshi Amaliyotlar</h3>
+          <p class="card-text">
+            Inklyuziv veb-ilovalar yarating. ARIA labellar, klaviatura
+            navigatsiyasi va o'yinni hamma uchun qulaylashtirish haqida
+            o'rganing.
+          </p>
+        </article>
+      </div>
+
+      <!-- Learning Path Section -->
+      <section class="mt-4" style="max-width: 800px; margin: 4rem auto">
+        <h2 class="text-center mb-4">Sizning O'rganish Yo'lingiz</h2>
+        <div
+          style="
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <ol
+            style="list-style: none; padding: 0; counter-reset: lesson-counter"
+          >
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >1</span
+              >
+              <strong>HTML Strukturasi</strong> - O'yin taxtasi va katak
+              elementlarini o'rnatish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >2</span
+              >
+              <strong>SCSS Stillari</strong> - O'yin uchun chiroyli, responsive
+              stillar yaratish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >3</span
+              >
+              <strong>Rasmni Qismlarga Bo'lish</strong> - Rasmni puzzle
+              qismlariga bo'lishni o'rganish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >4</span
+              >
+              <strong>Drag & Drop</strong> - Interaktiv katak harakatini amalga
+              oshirish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >5</span
+              >
+              <strong>G'alabani Aniqlash</strong> - Puzzle yechilganligini
+              tekshirish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                border-bottom: 1px solid #e5e7eb;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >6</span
+              >
+              <strong>Animatsiya va Ovozlar</strong> - Jozibali multimedia
+              effektlar qo'shish
+            </li>
+            <li
+              style="
+                counter-increment: lesson-counter;
+                padding: 1rem 0;
+                position: relative;
+                padding-left: 3rem;
+              "
+            >
+              <span
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 1rem;
+                  width: 2rem;
+                  height: 2rem;
+                  background: #6366f1;
+                  color: white;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >7</span
+              >
+              <strong>Yakuniy Yig'ish</strong> - Hammasini birlashtirib o'yinni
+              tugatish
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section
+        class="text-center mt-4"
+        style="
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          color: white;
+          padding: 4rem 2rem;
+          border-radius: 1rem;
+          margin-top: 4rem;
+        "
+      >
+        <h2 style="color: white; margin-bottom: 1rem">
+          Yaratishni Boshlashga Tayyormisiz?
+        </h2>
+        <p style="font-size: 1.125rem; margin-bottom: 2rem; opacity: 0.95">
+          Oldindan tajriba shart emas. Qadamma-qadam kuzatib boring va ajoyib
+          narsa yarating!
+        </p>
+        <a
+          href="lessons/lesson1.html"
+          class="btn btn-primary btn-large"
+          style="background: white; color: #6366f1"
+        >
+          1-Darsni Boshlash →
+        </a>
+      </section>
+
+      <!-- About Section -->
+      <section
+        id="about"
+        class="mt-4"
+        style="max-width: 800px; margin: 4rem auto"
+      >
+        <h2 class="text-center mb-4">Ushbu Darslik Haqida</h2>
+        <div class="card">
+          <p>
+            Ushbu darslik amaliy, qo'lda loyihalar orqali veb-dasturlashni
+            o'rganmoqchi bo'lgan boshlovchilar uchun yaratilgan. Puzzle o'yinini
+            yaratish HTML, CSS va JavaScript'ning birgalikda interaktiv
+            veb-ilovalarni yaratishini tushunishning ajoyib usuli.
+          </p>
+          <p>Har bir dars quyidagilarni o'z ichiga oladi:</p>
+          <ul style="color: #6b7280; line-height: 1.8">
+            <li>Konseptlar va texnikalarning aniq tushuntirishlari</li>
+            <li>
+              Darhol sinab ko'rish mumkin bo'lgan ishlaydigan kod misollari
+            </li>
+            <li>
+              Tajribali dasturchlardan maslahatlar va eng yaxshi amaliyotlar
+            </li>
+            <li>Tushunganingizni tekshirish uchun topshiriqlar</li>
+          </ul>
+          <p>
+            Ushbu darslik oxirida sizda to'liq ishlaydigan puzzle o'yini va
+            o'zingizning interaktiv veb-loyihalaringizni yaratish uchun bilimlar
+            bo'ladi. Barcha kod taqdim etilgan, yaxshi izohli va o'z
+            loyihalaringizda ishlatishga tayyor.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Bosh sahifa</a></li>
+          <li><a href="lessons/lesson1.html">O'rganishni Boshlash</a></li>
+          <li><a href="demo.html">Demoni Sinash</a></li>
+          <li><a href="#about">Haqida</a></li>
+        </ul>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 Puzzle Darsligi. Ta'lim maqsadida yaratilgan. Bepul
+            foydalanish va o'zgartirish mumkin.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Navigation Toggle Script -->
+    <script>
+      // Mobile navigation toggle
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove("active");
+        }
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,914 @@
+/* ===================================
+   PUZZLE GAME TUTORIAL - MAIN STYLES
+   Author: Educational Web Development
+   Description: Complete SCSS stylesheet for
+   the puzzle game tutorial website
+   =================================== */
+
+// ========== VARIABLES ==========
+$primary-color: #6366f1; // Indigo - main brand color
+$secondary-color: #8b5cf6; // Purple - accent color
+$success-color: #10b981; // Green - success states
+$warning-color: #f59e0b; // Orange - warnings
+$danger-color: #ef4444; // Red - errors
+
+$text-primary: #1f2937; // Dark gray - main text
+$text-secondary: #6b7280; // Medium gray - secondary text
+$text-light: #9ca3af; // Light gray - muted text
+
+$bg-primary: #ffffff; // White - main background
+$bg-secondary: #f9fafb; // Light gray - secondary background
+$bg-tertiary: #f3f4f6; // Slightly darker gray
+
+$border-color: #e5e7eb; // Light border
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+$border-radius-sm: 0.375rem; // 6px
+$border-radius: 0.5rem; // 8px
+$border-radius-lg: 0.75rem; // 12px
+$border-radius-xl: 1rem; // 16px
+
+$transition-fast: 150ms ease;
+$transition-base: 300ms ease;
+$transition-slow: 500ms ease;
+
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
+
+// ========== MIXINS ==========
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none;
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+@mixin card {
+  background: $bg-primary;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  padding: 1.5rem;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (max-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  } @else if $breakpoint == wide {
+    @media (min-width: $breakpoint-wide) {
+      @content;
+    }
+  }
+}
+
+// ========== RESET & BASE ==========
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: $text-primary;
+  background: $bg-secondary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.125rem;
+}
+h6 {
+  font-size: 1rem;
+}
+
+@include responsive(tablet) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $secondary-color;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// ========== NAVIGATION ==========
+.navbar {
+  background: $bg-primary;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .nav-container {
+    @include container;
+    @include flex-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $primary-color;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+
+    @include responsive(tablet) {
+      gap: 1rem;
+    }
+
+    @include responsive(mobile) {
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: $bg-primary;
+      padding: 1rem;
+      box-shadow: $shadow-md;
+      display: none;
+
+      &.active {
+        display: flex;
+      }
+    }
+  }
+
+  .nav-link {
+    color: $text-primary;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $primary-color;
+      transition: width $transition-base;
+    }
+
+    &:hover::after,
+    &.active::after {
+      width: 100%;
+    }
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: $text-primary;
+
+    @include responsive(mobile) {
+      display: block;
+    }
+  }
+}
+
+// ========== BUTTONS ==========
+.btn {
+  @include button-base;
+
+  &-primary {
+    background: $primary-color;
+    color: white;
+
+    &:hover {
+      background: darken($primary-color, 10%);
+      transform: translateY(-1px);
+      box-shadow: $shadow-md;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &-secondary {
+    background: $secondary-color;
+    color: white;
+
+    &:hover {
+      background: darken($secondary-color, 10%);
+    }
+  }
+
+  &-success {
+    background: $success-color;
+    color: white;
+
+    &:hover {
+      background: darken($success-color, 10%);
+    }
+  }
+
+  &-outline {
+    background: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+
+    &:hover {
+      background: $primary-color;
+      color: white;
+    }
+  }
+
+  &-large {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+
+  &-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+// ========== HERO SECTION ==========
+.hero {
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  color: white;
+  padding: 5rem 0;
+  text-align: center;
+
+  @include responsive(tablet) {
+    padding: 3rem 0;
+  }
+
+  .hero-container {
+    @include container;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.8s ease;
+
+    @include responsive(tablet) {
+      font-size: 2rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    animation: fadeInUp 0.8s ease 0.2s backwards;
+
+    @include responsive(tablet) {
+      font-size: 1rem;
+    }
+  }
+
+  .hero-cta {
+    animation: fadeInUp 0.8s ease 0.4s backwards;
+  }
+}
+
+// ========== MAIN CONTENT ==========
+.main-content {
+  @include container;
+  padding: 3rem 1.5rem;
+
+  @include responsive(tablet) {
+    padding: 2rem 1.5rem;
+  }
+}
+
+// ========== CARDS ==========
+.card {
+  @include card;
+
+  &-title {
+    color: $text-primary;
+    margin-bottom: 0.75rem;
+  }
+
+  &-text {
+    color: $text-secondary;
+    margin-bottom: 1rem;
+  }
+
+  &-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid $border-color;
+  }
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+
+  @include responsive(mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ========== CODE BLOCKS ==========
+.code-section {
+  margin: 2rem 0;
+
+  .code-header {
+    background: $text-primary;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: $border-radius $border-radius 0 0;
+    @include flex-between;
+
+    .code-label {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .code-copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: $border-radius-sm;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background $transition-fast;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.5rem;
+    background: $bg-tertiary;
+    border-radius: 0 0 $border-radius $border-radius;
+    overflow-x: auto;
+
+    code {
+      font-family: "Monaco", "Menlo", "Ubuntu Mono", "Courier New", monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: $text-primary;
+    }
+  }
+}
+
+// Inline code
+code {
+  background: $bg-tertiary;
+  padding: 0.2rem 0.4rem;
+  border-radius: $border-radius-sm;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Courier New", monospace;
+  font-size: 0.875em;
+  color: $danger-color;
+}
+
+// ========== LESSON PAGE ==========
+.lesson-container {
+  @include container;
+  padding: 3rem 1.5rem;
+  max-width: 900px;
+
+  .lesson-header {
+    margin-bottom: 3rem;
+    text-align: center;
+
+    .lesson-number {
+      display: inline-block;
+      background: $primary-color;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: $border-radius-xl;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .lesson-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+
+      @include responsive(tablet) {
+        font-size: 2rem;
+      }
+    }
+
+    .lesson-description {
+      color: $text-secondary;
+      font-size: 1.125rem;
+    }
+  }
+
+  .lesson-content {
+    .section {
+      margin-bottom: 3rem;
+
+      .section-title {
+        color: $primary-color;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid $primary-color;
+      }
+
+      .section-content {
+        color: $text-secondary;
+        line-height: 1.8;
+      }
+    }
+  }
+
+  .try-it-section {
+    background: $bg-primary;
+    border: 2px solid $primary-color;
+    border-radius: $border-radius-lg;
+    padding: 2rem;
+    margin: 2rem 0;
+
+    .try-it-title {
+      color: $primary-color;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: "🚀";
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .tip-box {
+    background: lighten($warning-color, 40%);
+    border-left: 4px solid $warning-color;
+    padding: 1rem 1.5rem;
+    border-radius: $border-radius;
+    margin: 1.5rem 0;
+
+    .tip-title {
+      color: darken($warning-color, 20%);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: "💡";
+      }
+    }
+
+    .tip-content {
+      color: darken($warning-color, 30%);
+    }
+  }
+
+  .lesson-navigation {
+    @include flex-between;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid $border-color;
+
+    @include responsive(mobile) {
+      flex-direction: column;
+      gap: 1rem;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ========== DEMO PAGE ==========
+.demo-container {
+  @include container;
+  padding: 3rem 1.5rem;
+  text-align: center;
+
+  .demo-header {
+    margin-bottom: 2rem;
+  }
+
+  .puzzle-game {
+    max-width: 600px;
+    margin: 0 auto;
+    background: $bg-primary;
+    padding: 2rem;
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-xl;
+
+    @include responsive(mobile) {
+      padding: 1rem;
+    }
+  }
+
+  .puzzle-controls {
+    @include flex-center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .puzzle-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0 auto;
+    max-width: 450px;
+    aspect-ratio: 1;
+    background: $bg-secondary;
+    padding: 0.5rem;
+    border-radius: $border-radius-lg;
+
+    @include responsive(mobile) {
+      max-width: 100%;
+    }
+  }
+
+  .puzzle-tile {
+    background-size: 300%;
+    background-color: $bg-tertiary;
+    border-radius: $border-radius;
+    cursor: grab;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+    box-shadow: $shadow-sm;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: $shadow-md;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &.dragging {
+      opacity: 0.5;
+    }
+  }
+
+  .win-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    padding: 3rem;
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-xl;
+    text-align: center;
+    z-index: 2000;
+
+    &.show {
+      animation: popIn 0.5s ease forwards;
+    }
+
+    .win-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: bounce 0.6s ease infinite;
+    }
+
+    .win-title {
+      color: $success-color;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .win-text {
+      color: $text-secondary;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-base;
+
+    &.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}
+
+// ========== FOOTER ==========
+.footer {
+  background: $text-primary;
+  color: white;
+  padding: 3rem 0 1.5rem;
+  margin-top: 5rem;
+
+  .footer-container {
+    @include container;
+    text-align: center;
+  }
+
+  .footer-content {
+    margin-bottom: 2rem;
+
+    h3 {
+      margin-bottom: 1rem;
+    }
+
+    p {
+      opacity: 0.8;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+
+    a {
+      color: white;
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .footer-bottom {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0.6;
+    font-size: 0.875rem;
+  }
+}
+
+// ========== ANIMATIONS ==========
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ========== UTILITY CLASSES ==========
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mt-2 {
+  margin-top: 1rem;
+}
+.mt-3 {
+  margin-top: 1.5rem;
+}
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+.mb-2 {
+  margin-bottom: 1rem;
+}
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+.mb-4 {
+  margin-bottom: 2rem;
+}
+
+.p-1 {
+  padding: 0.5rem;
+}
+.p-2 {
+  padding: 1rem;
+}
+.p-3 {
+  padding: 1.5rem;
+}
+.p-4 {
+  padding: 2rem;
+}
+
+.d-flex {
+  display: flex;
+}
+.flex-center {
+  @include flex-center;
+}
+.flex-between {
+  @include flex-between;
+}
+.gap-1 {
+  gap: 0.5rem;
+}
+.gap-2 {
+  gap: 1rem;
+}
+.gap-3 {
+  gap: 1.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+// ========== ACCESSIBILITY ==========
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Focus visible for keyboard navigation
+:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}

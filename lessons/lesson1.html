@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Dars 1: Puzzle o'yini uchun HTML strukturasini yaratishni o'rganing"
+    />
+    <title>Dars 1: HTML Strukturasi - Puzzle O'yini Darsligi</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo"> 🧩 Puzzle Darsligi </a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Navigatsiyani ochish"
+        >
+          ☰
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Lesson Content -->
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 1-dars</span>
+        <h1 class="lesson-title">HTML Strukturasini Yaratish</h1>
+        <p class="lesson-description">
+          Puzzle o'yini uchun semantik HTML asosini yaratishni o'rganing
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <!-- Introduction Section -->
+        <section class="section">
+          <h2 class="section-title">📚 Nimani O'rganasiz</h2>
+          <div class="section-content">
+            <p>
+              Ushbu darsda biz puzzle o'yinimiz uchun HTML strukturasini
+              yaratamiz. HTML (HyperText Markup Language) har bir veb-sahifaning
+              asosidir—u foydalanuvchilar ko'radigan va muloqot qiladigan
+              struktura va kontentni belgilaydi.
+            </p>
+            <p>
+              Yaxshi HTML strukturasi uy uchun mustahkam poydevorga o'xshaydi. U
+              quyidagicha bo'lishi kerak:
+            </p>
+            <ul>
+              <li>
+                <strong>Semantik</strong> - Kontentni tavsiflovchi ma'noli
+                teglardan foydalanadi
+              </li>
+              <li>
+                <strong>Accessible</strong> - Hamma, shu jumladan nogironligi
+                bo'lgan odamlar tomonidan ishlatilishi mumkin
+              </li>
+              <li><strong>Tartibli</strong> - Tushunish va saqlashga oson</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Concept: Basic Structure -->
+        <section class="section">
+          <h2 class="section-title">🏗️ O'yin Taxtasi Konteyneri</h2>
+          <div class="section-content">
+            <p>
+              Bizning puzzle o'yinimizga barcha qismlarni ushlab turish uchun
+              konteyner kerak. Buni butun puzzleni ushlab turadigan rasm
+              ramkasiga o'xshatish mumkin. Biz uni aniqlash uchun maxsus klass
+              nomi bilan
+              <code>&lt;div&gt;</code> elementidan foydalanamiz.
+            </p>
+            <p>O'yin taxtasi quyidagilarni o'z ichiga oladi:</p>
+            <ul>
+              <li>Boshqaruv tugmalari (aralashtirish, qayta boshlash)</li>
+              <li>Puzzle tarmog'i (plitalar joylashadigan joy)</li>
+              <li>G'alaba xabari ko'rsatish</li>
+            </ul>
+          </div>
+
+          <!-- Code Example -->
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">HTML - Asosiy O'yin Strukturasi</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Puzzle Game&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles/main.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Main game container --&gt;
+    &lt;div class="demo-container"&gt;
+        &lt;header class="demo-header"&gt;
+            &lt;h1&gt;🧩 Puzzle Game&lt;/h1&gt;
+            &lt;p&gt;Rearrange the tiles to complete the puzzle!&lt;/p&gt;
+        &lt;/header&gt;
+
+        &lt;!-- The game board --&gt;
+        &lt;div class="puzzle-game"&gt;
+            &lt;!-- Control buttons --&gt;
+            &lt;div class="puzzle-controls"&gt;
+                &lt;button class="btn btn-primary"&gt;Shuffle&lt;/button&gt;
+                &lt;button class="btn btn-secondary"&gt;Restart&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Puzzle grid (tiles will go here) --&gt;
+            &lt;div class="puzzle-board" id="puzzleBoard"&gt;
+                &lt;!-- Tiles will be added by JavaScript --&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Asosiy Nuqtalar</div>
+            <div class="tip-content">
+              <ul>
+                <li>
+                  <code>&lt;meta viewport&gt;</code> tegi o'yinni mobil
+                  qurilmalarda responsiv qiladi
+                </li>
+                <li>
+                  Yaxshi struktura uchun <code>&lt;header&gt;</code> kabi
+                  semantik HTML5 teglaridan foydalanamiz
+                </li>
+                <li>
+                  <code>puzzle-board</code> kabi klass nomlari element nima
+                  qilishini tavsiflaydi
+                </li>
+                <li>
+                  Puzzle taxtasiga ID beramiz, shunda JavaScript uni oson
+                  topishi mumkin
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Concept: Puzzle Tiles -->
+        <section class="section">
+          <h2 class="section-title">🎯 Puzzle Plitalarini Yaratish</h2>
+          <div class="section-content">
+            <p>
+              Har bir puzzle qismi rasmning bir qismini ko'rsatadigan
+              <code>&lt;div&gt;</code> elementidir. 3×3 puzzle uchun bizga 9 ta
+              plita kerak. Har bir plita quyidagilarni bilishi kerak:
+            </p>
+            <ul>
+              <li>
+                <strong>Pozitsiya</strong> - Hozirda tarmoqda qayerda joylashgan
+              </li>
+              <li>
+                <strong>Asl pozitsiya</strong> - Hal qilinganda qayerda bo'lishi
+                kerak
+              </li>
+              <li>
+                <strong>Fon rasmi</strong> - Rasmning qaysi qismini ko'rsatish
+              </li>
+            </ul>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">HTML - Puzzle Plita Strukturasi</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>&lt;!-- A single puzzle tile --&gt;
+&lt;div class="puzzle-tile" 
+     data-position="0" 
+     data-correct-position="0"
+     draggable="true"
+     style="background-image: url('assets/images/puzzle.jpg');
+            background-position: 0% 0%;"&gt;
+&lt;/div&gt;
+
+&lt;!-- Another tile (top middle position) --&gt;
+&lt;div class="puzzle-tile" 
+     data-position="1" 
+     data-correct-position="1"
+     draggable="true"
+     style="background-image: url('assets/images/puzzle.jpg');
+            background-position: 50% 0%;"&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Data Atributlarini Tushunish</div>
+            <div class="tip-content">
+              <p>
+                <code>data-*</code> atributlari HTML elementlarida ma'lumotlarni
+                saqlash uchun foydalaniladigan maxsus atributlardir. JavaScript
+                bu qiymatlarni o'qiy va o'zgartirishi mumkin. Har birining
+                ma'nosi:
+              </p>
+              <ul>
+                <li>
+                  <code>data-position</code> - Hozirgi pozitsiya (3×3 tarmoq
+                  uchun 0-8)
+                </li>
+                <li>
+                  <code>data-correct-position</code> - Puzzle hal qilinganda bu
+                  plita qayerda bo'lishi kerak
+                </li>
+                <li>
+                  <code>draggable="true"</code> - Foydalanuvchiga bu elementni
+                  sudrab o'tkazish imkonini beradi
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Try It Section -->
+        <section class="try-it-section">
+          <h3 class="try-it-title">O'zingiz Sinab Ko'ring</h3>
+          <p>
+            Quyida oddiy 2×2 puzzle (4 ta plita) uchun to'liq HTML strukturasi
+            keltirilgan. Har bir plita rasmning turli qismlarini ko'rsatish
+            uchun turli <code>data-position</code> qiymatlari va
+            <code>background-position</code> sozlamalariga ega ekanligiga
+            e'tibor bering.
+          </p>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq Misol - 2×2 Puzzle</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>&lt;div class="puzzle-board" style="grid-template-columns: repeat(2, 1fr);"&gt;
+    &lt;!-- Top-left tile --&gt;
+    &lt;div class="puzzle-tile" 
+         data-position="0" 
+         data-correct-position="0"
+         style="background-position: 0% 0%;"&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Top-right tile --&gt;
+    &lt;div class="puzzle-tile" 
+         data-position="1" 
+         data-correct-position="1"
+         style="background-position: 100% 0%;"&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Bottom-left tile --&gt;
+    &lt;div class="puzzle-tile" 
+         data-position="2" 
+         data-correct-position="2"
+         style="background-position: 0% 100%;"&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Bottom-right tile --&gt;
+    &lt;div class="puzzle-tile" 
+         data-position="3" 
+         data-correct-position="3"
+         style="background-position: 100% 100%;"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <!-- Accessibility Section -->
+        <section class="section">
+          <h2 class="section-title">♿ Accessibility Qilish</h2>
+          <div class="section-content">
+            <p>
+              Accessibility degani o'yiningizdagi hamma, shu jumladan ekran
+              o'quvchilar yoki klaviatura navigatsiyasidan foydalanadigan
+              odamlar foydalanishi mumkinligini ta'minlashdir. Puzzlemizni
+              accessible qilish usullari:
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >HTML - Accessible Puzzle Strukturasi</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxa olish
+              </button>
+            </div>
+            <pre><code>&lt;div class="puzzle-game" role="application" aria-label="Puzzle Game"&gt;
+    &lt;div class="puzzle-controls"&gt;
+        &lt;button class="btn btn-primary" 
+                id="shuffleBtn"
+                aria-label="Shuffle puzzle pieces"&gt;
+            Shuffle
+        &lt;/button&gt;
+        &lt;button class="btn btn-secondary" 
+                id="restartBtn"
+                aria-label="Restart puzzle game"&gt;
+            Restart
+        &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class="puzzle-board" 
+         id="puzzleBoard"
+         role="grid"
+         aria-label="Puzzle board with 9 tiles"&gt;
+        &lt;div class="puzzle-tile" 
+             role="gridcell"
+             tabindex="0"
+             aria-label="Puzzle piece 1 of 9"
+             data-position="0" 
+             data-correct-position="0"
+             draggable="true"&gt;
+        &lt;/div&gt;
+        &lt;!-- More tiles... --&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">
+              Accessibility Funksiyalari Tushuntirildi
+            </div>
+            <div class="tip-content">
+              <ul>
+                <li>
+                  <code>role="application"</code> - Ekran o'quvchilarga bu
+                  interaktiv ilova ekanligini bildiradi
+                </li>
+                <li>
+                  <code>aria-label</code> - Ekran o'quvchilar uchun matn
+                  tavsifini beradi
+                </li>
+                <li>
+                  <code>tabindex="0"</code> - Elementni klaviatura orqali
+                  fokuslash mumkin qiladi
+                </li>
+                <li>
+                  <code>role="grid"</code> - Puzzle taxtasi strukturasini
+                  tasvirlaydi
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Summary Section -->
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulasasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz quyidagilarni o'rgandingiz:</p>
+            <ul>
+              <li>Puzzle o'yini uchun semantik HTML strukturasini yaratish</li>
+              <li>
+                HTML elementlarida ma'lumotlarni saqlash uchun data
+                atributlaridan foydalanish
+              </li>
+              <li>Interaktiv o'yinlar uchun HTMLni draggable qilish</li>
+              <li>
+                ARIA yorliqlar va rollar bilan accessibility funksiyalarini
+                qo'shish
+              </li>
+              <li>Puzzle plitalarini tarmoq layoutida tartibga solish</li>
+            </ul>
+            <p>
+              <strong>Keyingi:</strong> 2-darsda biz bu strukturani SCSS bilan
+              stillashtirish va uni chiroyli hamda responsiv qilishni
+              o'rganamiz!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="lesson-navigation">
+        <a href="../index.html" class="btn btn-outline"
+          >← Bosh sahifaga qaytish</a
+        >
+        <a href="lesson2.html" class="btn btn-primary"
+          >Keyingi Dars: SCSS Stillari →</a
+        >
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi. Ta'lim resursi.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // Mobile navigation toggle
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+      });
+
+      // Code copy functionality
+      function copyCode(button) {
+        const codeBlock = button.closest(".code-section").querySelector("code");
+        const text = codeBlock.textContent;
+
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            const originalText = button.textContent;
+            button.textContent = "Nusxa olindi!";
+            button.style.background = "rgba(16, 185, 129, 0.3)";
+
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.background = "";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy:", err);
+          });
+      }
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

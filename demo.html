@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="To'liq ishlaydigan puzzle o'yinini o'ynang - HTML, SCSS va JavaScript bilan yaratilgan"
+    />
+    <title>Puzzle O'yini Demo - Jonli O'yin</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+      /* Qo'shimcha animatsiyalar */
+      .puzzle-tile.shuffling {
+        animation: shuffleAnim 0.3s ease;
+      }
+
+      @keyframes shuffleAnim {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.9);
+          opacity: 0.7;
+        }
+      }
+
+      .puzzle-tile.swapping {
+        animation: swapPulse 0.3s ease;
+      }
+
+      @keyframes swapPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+          opacity: 0.8;
+        }
+      }
+
+      /* Konfetti */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        top: -10px;
+        z-index: 9999;
+        animation: confettiFall linear forwards;
+      }
+
+      @keyframes confettiFall {
+        to {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Statistika paneli */
+      .stats-panel {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 120px;
+        text-align: center;
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+      }
+
+      /* Qiyinlik tanlash */
+      .difficulty-selector {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .difficulty-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid #e5e7eb;
+        background: white;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .difficulty-btn:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+      }
+
+      .difficulty-btn.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+      }
+
+      /* Rasmga qarang */
+      .image-preview {
+        max-width: 200px;
+        margin: 1rem auto;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .image-preview:hover {
+        transform: scale(1.05);
+      }
+
+      .image-preview img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* Yordam modali */
+      .help-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #6366f1;
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+
+      .help-btn:hover {
+        transform: scale(1.1);
+      }
+
+      /* Overlay fon */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+        display: none;
+        backdrop-filter: blur(4px);
+      }
+
+      .overlay.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Modal z-index oshirish */
+      .win-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: white;
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        z-index: 2000;
+        min-width: 400px;
+        max-width: 90%;
+      }
+
+      .win-message.show {
+        animation: popIn 0.5s ease forwards;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      .win-emoji {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: bounce 0.6s ease infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .win-title {
+        color: #10b981;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .win-text {
+        color: #6b7280;
+        margin-bottom: 2rem;
+        font-size: 1.125rem;
+      }
+
+      .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+      }
+
+      .help-modal-content ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .help-modal-content ul li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .help-modal-content ul li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo"> 🧩 Puzzle Darsligi </a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Navigatsiyani ochish"
+        >
+          ☰
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lessons/lesson1.html" class="nav-link">Darslar</a></li>
+          <li><a href="demo.html" class="nav-link active">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Demo Container -->
+    <div class="demo-container">
+      <header class="demo-header">
+        <h1>🎮 Puzzle O'yini</h1>
+        <p>Kataklarni to'g'ri joyga qo'ying va puzzleni yeching!</p>
+      </header>
+
+      <!-- Statistika -->
+      <div class="stats-panel">
+        <div class="stat-item">
+          <div class="stat-label">Harakatlar</div>
+          <div class="stat-value" id="moveCount">🔢 0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Vaqt</div>
+          <div class="stat-value" id="timerDisplay">⏱️ 0:00</div>
+        </div>
+      </div>
+
+      <!-- Qiyinlik darajasi -->
+      <div class="difficulty-selector">
+        <button
+          class="difficulty-btn active"
+          onclick="changeGridSize(3)"
+          data-size="3"
+        >
+          Oson (3×3)
+        </button>
+        <button
+          class="difficulty-btn"
+          onclick="changeGridSize(4)"
+          data-size="4"
+        >
+          O'rta (4×4)
+        </button>
+      </div>
+
+      <!-- O'yin -->
+      <div class="puzzle-game">
+        <!-- Boshqaruv tugmalari -->
+        <div class="puzzle-controls">
+          <button class="btn btn-primary" id="shuffleBtn">
+            🔀 Aralashtirish
+          </button>
+          <button class="btn btn-secondary" id="restartBtn">
+            🔄 Qayta boshlash
+          </button>
+        </div>
+
+        <!-- Puzzle board -->
+        <div
+          class="puzzle-board"
+          id="puzzleBoard"
+          role="grid"
+          aria-label="Puzzle o'yin taxtasi"
+        >
+          <!-- Kataklat JavaScript orqali qo'shiladi -->
+        </div>
+
+        <!-- Rasm ko'rinishi -->
+        <div
+          class="image-preview"
+          onclick="showOriginalImage()"
+          title="Asl rasmni ko'rish"
+        >
+          <img
+            src="assets/images/puzzle.jpg"
+            alt="Puzzle rasmi"
+            id="originalImage"
+          />
+        </div>
+      </div>
+
+      <!-- Yo'riqnoma -->
+      <div class="card" style="max-width: 600px; margin: 2rem auto">
+        <h3 style="margin-bottom: 1rem">📖 Qanday O'ynash:</h3>
+        <ol style="line-height: 1.8; color: #6b7280">
+          <li><strong>"Aralashtirish"</strong> tugmasini bosing</li>
+          <li>Kataklarni <strong>sichqoncha bilan sudrang</strong></li>
+          <li>
+            Boshqa katak ustiga <strong>qo'ying</strong> - ular o'rin almashadi
+          </li>
+          <li>Barcha kataklarni <strong>to'g'ri joyga</strong> qo'ying</li>
+          <li>
+            Puzzle to'liq yechilganda <strong>g'alaba xabari</strong> chiqadi!
+          </li>
+        </ol>
+
+        <div
+          style="
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+          "
+        >
+          <strong>💡 Maslahat:</strong> Asl rasmni ko'rish uchun pastdagi kichik
+          rasmni bosing!
+        </div>
+      </div>
+
+      <!-- Darslar havolasi -->
+      <div style="text-align: center; margin: 3rem 0">
+        <h3 style="margin-bottom: 1rem">
+          O'zingiz ham shunday o'yin yaratmoqchimisiz?
+        </h3>
+        <p style="color: #6b7280; margin-bottom: 1.5rem">
+          Bizning qadamma-qadam darslarimiz bilan HTML, SCSS va JavaScript
+          yordamida bu o'yinni qanday yaratishni o'rganing!
+        </p>
+        <a href="lessons/lesson1.html" class="btn btn-primary btn-large">
+          Darslarni Boshlash →
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Bosh sahifa</a></li>
+          <li><a href="lessons/lesson1.html">Darslarni Boshlash</a></li>
+          <li><a href="demo.html">Demo O'yin</a></li>
+        </ul>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 Puzzle Darsligi. Ta'lim maqsadida yaratilgan. Bepul
+            foydalanish va o'zgartirish mumkin.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Yordam tugmasi -->
+    <button class="help-btn" onclick="showHelp()" title="Yordam">❓</button>
+
+    <!-- Scripts -->
+    <script src="scripts/game.js"></script>
+    <script>
+      // Navigation toggle
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove("active");
+        }
+      });
+
+      // Grid o'lchamini o'zgartirish
+      function changeGridSize(size) {
+        if (puzzleGame) {
+          puzzleGame.changeGridSize(size);
+
+          // Active klassni yangilash
+          document.querySelectorAll(".difficulty-btn").forEach((btn) => {
+            btn.classList.remove("active");
+            if (btn.dataset.size == size) {
+              btn.classList.add("active");
+            }
+          });
+        }
+      }
+
+      // Asl rasmni ko'rsatish
+      function showOriginalImage() {
+        const imageUrl = puzzleGame
+          ? puzzleGame.imageUrl
+          : "assets/images/puzzle.jpg";
+
+        const overlay = document.createElement("div");
+        overlay.className = "overlay show";
+        overlay.style.cursor = "pointer";
+
+        const imageContainer = document.createElement("div");
+        imageContainer.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-width: 90%;
+                max-height: 90%;
+                z-index: 2001;
+                cursor: pointer;
+            `;
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.style.cssText = `
+                width: 100%;
+                height: auto;
+                border-radius: 1rem;
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            `;
+
+        imageContainer.appendChild(img);
+        document.body.appendChild(overlay);
+        document.body.appendChild(imageContainer);
+
+        const closeModal = () => {
+          overlay.remove();
+          imageContainer.remove();
+        };
+
+        overlay.addEventListener("click", closeModal);
+        imageContainer.addEventListener("click", closeModal);
+      }
+
+      // Yordam ko'rsatish
+      function showHelp() {
+        // Eski modallarni o'chirish
+        const oldOverlay = document.querySelector(".overlay");
+        const oldModal = document.querySelectorAll(".win-message");
+        if (oldOverlay) oldOverlay.remove();
+        oldModal.forEach((m) => m.remove());
+
+        // Yangi overlay
+        const overlay = document.createElement("div");
+        overlay.className = "overlay show";
+        overlay.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          z-index: 1999;
+          display: block;
+        `;
+
+        // Yordam modali
+        const helpModal = document.createElement("div");
+        helpModal.className = "win-message show";
+        helpModal.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          padding: 2rem;
+          border-radius: 1rem;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          z-index: 2000;
+          max-width: 500px;
+          width: 90%;
+          max-height: 80vh;
+          overflow-y: auto;
+        `;
+        helpModal.innerHTML = `
+                <h2 style="color: #6366f1; margin-bottom: 1rem;">❓ Yordam</h2>
+                <div class="help-modal-content" style="text-align: left; color: #4b5563;">
+                    <h4 style="margin-top: 1rem; color: #1f2937;">🖱️ Boshqaruv:</h4>
+                    <ul>
+                        <li>Katakni sichqoncha bilan bosib ushlab turing</li>
+                        <li>Boshqa katak ustiga sudrang</li>
+                        <li>Qo'yib yuboring - kataklar o'rin almashadi</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 1rem; color: #1f2937;">🎯 Maqsad:</h4>
+                    <p>Barcha kataklarni to'g'ri joyiga qo'yib, to'liq rasmni tiklang.</p>
+                    
+                    <h4 style="margin-top: 1rem; color: #1f2937;">💡 Maslahatlar:</h4>
+                    <ul>
+                        <li>Avval burchaklardan boshlang</li>
+                        <li>Asl rasmga vaqti-vaqti bilan qarang</li>
+                        <li>Qiyinroq darajani tanlang (4×4)</li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 1rem;" onclick="closeHelpModal()">
+                    Tushunarli
+                </button>
+            `;
+
+        document.body.appendChild(overlay);
+        document.body.appendChild(helpModal);
+
+        // Overlay bosilganda yopish
+        overlay.addEventListener("click", closeHelpModal);
+      }
+
+      // Yordam modalini yopish
+      function closeHelpModal() {
+        const overlay = document.querySelector(".overlay");
+        const modals = document.querySelectorAll(".win-message");
+        if (overlay) {
+          overlay.remove();
+        }
+        modals.forEach((modal) => {
+          modal.remove();
+        });
+      }
+
+      // Global qilish
+      window.showHelp = showHelp;
+      window.closeHelpModal = closeHelpModal;
+
+      // Klaviatura yordam
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          // Barcha modallarni yopish
+          document
+            .querySelectorAll(".overlay, .win-message")
+            .forEach((el) => el.remove());
+        }
+
+        if (e.key === "r" || e.key === "R") {
+          // R tugmasi - Qayta boshlash
+          document.getElementById("restartBtn")?.click();
+        }
+
+        if (e.key === "s" || e.key === "S") {
+          // S tugmasi - Shuffle
+          document.getElementById("shuffleBtn")?.click();
+        }
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

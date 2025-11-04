@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Dars 3: Rasmni qismlarga bo'lish usulini o'rganing"
+    />
+    <title>Dars 3: Rasmni Qismlarga Bo'lish - Puzzle O'yini Darsligi</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../index.html" class="nav-logo">🧩 Puzzle Darsligi</a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Navigatsiyani ochish"
+        >
+          ☰
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="../index.html" class="nav-link">Bosh sahifa</a></li>
+          <li><a href="lesson1.html" class="nav-link active">Darslar</a></li>
+          <li><a href="../demo.html" class="nav-link">Demo</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="lesson-container">
+      <header class="lesson-header">
+        <span class="lesson-number">7 darsdan 3-dars</span>
+        <h1 class="lesson-title">Rasmni Qismlarga Bo'lish</h1>
+        <p class="lesson-description">
+          JavaScript yordamida rasmni puzzle qismlariga bo'lishni o'rganing
+        </p>
+      </header>
+
+      <div class="lesson-content">
+        <section class="section">
+          <h2 class="section-title">📚 Nimalarni O'rganasiz</h2>
+          <div class="section-content">
+            <p>
+              Ushbu darsda biz rasmni puzzle o'yini uchun qismlarga qanday
+              bo'lishni o'rganamiz. Bu jarayon bir necha qadamlarni o'z ichiga
+              oladi:
+            </p>
+            <ul>
+              <li>
+                <strong>Rasm yuklash</strong> - Foydalanuvchi tanlagan yoki
+                oldindan belgilangan rasmni yuklash
+              </li>
+              <li>
+                <strong>Grid yaratish</strong> - 3×3 yoki 4×4 katakchalar
+                yaratish
+              </li>
+              <li>
+                <strong>Background pozitsiyalash</strong> - Har bir katak uchun
+                rasm qismini to'g'ri joylashtirish
+              </li>
+              <li>
+                <strong>Dinamik yaratish</strong> - JavaScript orqali HTML
+                elementlarini yaratish
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🎯 Background Pozitsiyasini Tushunish</h2>
+          <div class="section-content">
+            <p>
+              CSS <code>background-position</code> xususiyati rasmning qaysi
+              qismini ko'rsatishni boshqaradi. 3×3 puzzle uchun biz rasmni 9
+              qismga bo'lamiz:
+            </p>
+            <ul>
+              <li><strong>Birinchi qator:</strong> 0% 0%, 50% 0%, 100% 0%</li>
+              <li>
+                <strong>Ikkinchi qator:</strong> 0% 50%, 50% 50%, 100% 50%
+              </li>
+              <li>
+                <strong>Uchinchi qator:</strong> 0% 100%, 50% 100%, 100% 100%
+              </li>
+            </ul>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >JavaScript - Background Pozitsiyasini Hisoblash</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Puzzle katagi uchun background pozitsiyasini hisoblaydi
+ * @param {number} index - Katak indeksi (0-8 arasi)
+ * @param {number} gridSize - Grid o'lchami (masalan, 3x3 uchun 3)
+ * @returns {object} - {x, y} pozitsiyasi foizlarda
+ */
+function calculateBackgroundPosition(index, gridSize = 3) {
+    // Qator va ustun raqamlarini topish
+    const row = Math.floor(index / gridSize);
+    const col = index % gridSize;
+    
+    // Foizga aylantirish (0%, 50%, 100%)
+    const x = col * (100 / (gridSize - 1));
+    const y = row * (100 / (gridSize - 1));
+    
+    return { x, y };
+}
+
+// Misol: 5-katak (o'rta)
+const pos = calculateBackgroundPosition(5, 3);
+console.log(pos); // {x: 50, y: 50}</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Matematik Tushuntirish</div>
+            <div class="tip-content">
+              <p>3×3 grid uchun: katak indeksi 5 (o'rtadagi katak)</p>
+              <ul>
+                <li>Qator = 5 ÷ 3 = 1 (ikkinchi qator)</li>
+                <li>Ustun = 5 % 3 = 2 (uchinchi ustun, lekin 0-indexdan 2)</li>
+                <li>X = 2 × 50% = 100% (o'ngda)</li>
+                <li>Y = 1 × 50% = 50% (o'rtada)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🔨 Puzzle Kataklarini Yaratish</h2>
+          <div class="section-content">
+            <p>
+              Endi biz JavaScript yordamida barcha puzzle kataklarini dinamik
+              ravishda yaratamiz. Bu usul flexible - turli o'lchamdagi gridlar
+              uchun ishlaydi.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label"
+                >JavaScript - Puzzle Kataklarini Yaratish</span
+              >
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Puzzle boardni kataklarni bilan to'ldiradi
+ * @param {string} imageUrl - Puzzle rasmi URL manzili
+ * @param {number} gridSize - Grid o'lchami (3 yoki 4)
+ */
+function createPuzzleTiles(imageUrl, gridSize = 3) {
+    const puzzleBoard = document.getElementById('puzzleBoard');
+    puzzleBoard.innerHTML = ''; // Oldingi kataklarni tozalash
+    
+    // Grid template kolonkalarini o'rnatish
+    puzzleBoard.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    
+    // Jami katak soni
+    const totalTiles = gridSize * gridSize;
+    
+    // Har bir katak uchun
+    for (let i = 0; i < totalTiles; i++) {
+        // Yangi katak elementi yaratish
+        const tile = document.createElement('div');
+        tile.className = 'puzzle-tile';
+        
+        // Data atributlarini o'rnatish
+        tile.dataset.position = i;           // Hozirgi pozitsiya
+        tile.dataset.correctPosition = i;    // To'g'ri pozitsiya
+        tile.draggable = true;               // Draggable qilish
+        
+        // Background pozitsiyasini hisoblash
+        const pos = calculateBackgroundPosition(i, gridSize);
+        
+        // Inline stillarni qo'shish
+        tile.style.backgroundImage = `url('${imageUrl}')`;
+        tile.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+        tile.style.backgroundSize = `${gridSize * 100}%`;
+        
+        // Accessibility uchun
+        tile.setAttribute('role', 'gridcell');
+        tile.setAttribute('aria-label', `Puzzle qismi ${i + 1} / ${totalTiles}`);
+        tile.setAttribute('tabindex', '0');
+        
+        // Boardga qo'shish
+        puzzleBoard.appendChild(tile);
+    }
+}
+
+// Ishlatish
+createPuzzleTiles('assets/images/puzzle.jpg', 3);</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">🖼️ Rasm Yuklash va Validatsiya</h2>
+          <div class="section-content">
+            <p>
+              Foydalanuvchiga o'z rasmini yuklash imkonini beramiz. Rasm
+              yuklanishini kutish va xatoliklar bilan ishlash muhim.
+            </p>
+          </div>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">JavaScript - Rasm Yuklash</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>/**
+ * Foydalanuvchi tanlagan rasmni yuklaydi
+ */
+function loadCustomImage() {
+    // File input yaratish
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*'; // Faqat rasmlar
+    
+    // Fayl tanlanganda
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        
+        // Validatsiya
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Iltimos, rasm fayl tanlang!');
+            return;
+        }
+        
+        // Fayl o'lchamini tekshirish (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Rasm juda katta! 5MB dan kichik bo\'lishi kerak.');
+            return;
+        }
+        
+        // FileReader yordamida rasmni o'qish
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+            const imageUrl = event.target.result;
+            
+            // Rasmning to'liq yuklanishini kutish
+            const img = new Image();
+            img.onload = () => {
+                // Puzzle yaratish
+                createPuzzleTiles(imageUrl, 3);
+                console.log('Rasm muvaffaqiyatli yuklandi!');
+            };
+            img.onerror = () => {
+                alert('Rasmni yuklashda xatolik yuz berdi!');
+            };
+            img.src = imageUrl;
+        };
+        
+        reader.onerror = () => {
+            alert('Faylni o\'qishda xatolik!');
+        };
+        
+        reader.readAsDataURL(file);
+    };
+    
+    // File dialogni ochish
+    input.click();
+}
+
+// Tugmaga bog'lash
+document.getElementById('uploadBtn').addEventListener('click', loadCustomImage);</code></pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-title">Xavfsizlik Masalalari</div>
+            <div class="tip-content">
+              <ul>
+                <li>Doimo fayl turini tekshiring</li>
+                <li>
+                  Fayl o'lchamini cheklang (server resurslarini himoya qilish
+                  uchun)
+                </li>
+                <li>Foydalanuvchiga aniq xato xabarlari bering</li>
+                <li>Rasmning to'liq yuklanishini kutib, keyin ishlatish</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="try-it-section">
+          <h3 class="try-it-title">To'liq Misol</h3>
+          <p>Mana to'liq kod - rasm yuklash va puzzle yaratish:</p>
+
+          <div class="code-section">
+            <div class="code-header">
+              <span class="code-label">To'liq JavaScript Kodi</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">
+                Nusxalash
+              </button>
+            </div>
+            <pre><code>// === PUZZLE YARATUVCHI ===
+
+class PuzzleCreator {
+    constructor(boardId, gridSize = 3) {
+        this.board = document.getElementById(boardId);
+        this.gridSize = gridSize;
+        this.imageUrl = null;
+    }
+    
+    // Background pozitsiyasini hisoblash
+    calculatePosition(index) {
+        const row = Math.floor(index / this.gridSize);
+        const col = index % this.gridSize;
+        const x = col * (100 / (this.gridSize - 1));
+        const y = row * (100 / (this.gridSize - 1));
+        return { x, y };
+    }
+    
+    // Puzzleni yaratish
+    create(imageUrl) {
+        this.imageUrl = imageUrl;
+        this.board.innerHTML = '';
+        this.board.style.gridTemplateColumns = 
+            `repeat(${this.gridSize}, 1fr)`;
+        
+        const total = this.gridSize * this.gridSize;
+        
+        for (let i = 0; i < total; i++) {
+            const tile = this.createTile(i);
+            this.board.appendChild(tile);
+        }
+    }
+    
+    // Bitta katak yaratish
+    createTile(index) {
+        const tile = document.createElement('div');
+        tile.className = 'puzzle-tile';
+        tile.dataset.position = index;
+        tile.dataset.correctPosition = index;
+        tile.draggable = true;
+        
+        const pos = this.calculatePosition(index);
+        tile.style.backgroundImage = `url('${this.imageUrl}')`;
+        tile.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+        tile.style.backgroundSize = `${this.gridSize * 100}%`;
+        
+        return tile;
+    }
+}
+
+// Ishlatish
+const puzzle = new PuzzleCreator('puzzleBoard', 3);
+puzzle.create('assets/images/puzzle.jpg');</code></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">📝 Dars Xulosasi</h2>
+          <div class="section-content">
+            <p>Ushbu darsda siz quyidagilarni o'rgandingiz:</p>
+            <ul>
+              <li>
+                CSS background-position yordamida rasmni qanday qismlarga
+                bo'lish
+              </li>
+              <li>JavaScript orqali dinamik HTML elementlarini yaratish</li>
+              <li>Matematik hisoblashlar yordamida pozitsiyalarni topish</li>
+              <li>FileReader API yordamida rasmlarni yuklash</li>
+              <li>Fayl validatsiyasi va xatoliklar bilan ishlash</li>
+              <li>Class strukturasini ishlatib kodni tashkil qilish</li>
+            </ul>
+            <p>
+              <strong>Keyingi dars:</strong> 4-darsda biz drag va drop
+              funksiyasini qo'shamiz!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="lesson-navigation">
+        <a href="lesson2.html" class="btn btn-outline"
+          >← Oldingi: SCSS Stillari</a
+        >
+        <a href="lesson4.html" class="btn btn-primary"
+          >Keyingi: Drag & Drop →</a
+        >
+      </nav>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <h3>🧩 Puzzle O'yini Darsligi</h3>
+          <p>Interaktiv o'yinlar yaratish orqali veb-dasturlashni o'rganing</p>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Puzzle Darsligi. Ta'lim resursi.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+      navToggle.addEventListener("click", () =>
+        navMenu.classList.toggle("active")
+      );
+
+      function copyCode(button) {
+        const code = button
+          .closest(".code-section")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = "Nusxalandi!";
+          setTimeout(() => (button.textContent = "Nusxalash"), 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

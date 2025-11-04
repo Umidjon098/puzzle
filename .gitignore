@@ -1,0 +1,29 @@
+# Node.js dependencies
+node_modules/
+
+# Log files
+*.log
+
+# Source maps
+*.map
+
+# macOS system files
+*.DS_Store
+
+# Environment variables
+*.env
+
+# Build output (if any in future)
+dist/
+build/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary files
+*.tmp
+tmp/
+
+# VS Code settings (optional)
+.vscode/
